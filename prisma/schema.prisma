@@ -1,0 +1,33 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:12345678@localhost:5432/postgres"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  name     String
+  username String   @unique
+  email    String   @unique
+  usertype String
+  password String
+  products Product[]  // Defina a relação inversa referenciando o modelo Product
+}
+
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  quantity    Int
+  image       String
+  category    String
+  brand       String
+  available   Boolean
+  userId      Int      // Adicione o campo userId para estabelecer a relação
+  user        User     @relation(fields: [userId], references: [id])
+}
