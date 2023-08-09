@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaClient, Product } from '@prisma/client';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -96,14 +96,27 @@ export class ProductsService {
     }
   }
 
-  findAll() {
-    // Lógica para retornar todos os produtos
-    return this.prisma.product.findMany();
+  async findAll() {
+    const products = await this.prisma.product.findMany({
+      orderBy: {
+        id: 'asc', // Ordena os produtos pelo ID de forma crescente (ascendente)
+      },
+    });
+    return products;
   }
 
-  findOne(id: number) {
-    // Lógica para retornar um produto específico com base no ID fornecido
-    return this.prisma.product.findUnique({ where: { id } });
+  async findOne(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id, // Correto: Passar a variável `id` como argumento
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+    }
+
+    return user;
   }
 
   async remove(id: number) {
