@@ -106,17 +106,17 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    const user = await this.prisma.user.findUnique({
+    const product = await this.prisma.product.findUnique({
       where: {
         id: id, // Correto: Passar a variável `id` como argumento
       },
     });
 
-    if (!user) {
+    if (!product) {
       throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
     }
 
-    return user;
+    return product;
   }
 
   async remove(id: number) {
