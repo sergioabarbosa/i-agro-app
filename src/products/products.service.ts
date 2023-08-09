@@ -113,7 +113,7 @@ export class ProductsService {
     });
 
     if (!product) {
-      throw new NotFoundException(`Usuário com ID ${id} não encontrado`);
+      throw new NotFoundException(`Produto com ID ${id} não encontrado`);
     }
 
     return product;
