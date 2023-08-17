@@ -8,8 +8,10 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    const { id, name, username, usertype, email, password } = createUserDto;
+    const { id, name, username, usertype, email, password, products } =
+      createUserDto;
 
+    // Crie o usuário no banco de dados
     const user = await this.prisma.user.create({
       data: {
         id,
@@ -17,7 +19,11 @@ export class UsersService {
         username,
         usertype,
         email,
-        password, // Certifique-se de passar o valor do campo "password" aqui
+        password,
+        products: { connect: products.map((productId) => ({ id: productId })) }, // Conecta os produtos ao usuário
+      },
+      include: {
+        products: true, // Inclui os produtos associados ao usuário no resultado
       },
     });
 
@@ -35,7 +41,7 @@ export class UsersService {
 
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
-      where: { id: id },
+      where: { id },
     });
 
     if (!user) {

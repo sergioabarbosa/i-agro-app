@@ -5,4 +5,5 @@ export class CreateUserDto {
   usertype: string;
   email: string;
   password: string;
+  products: number[]; // Array de IDs de produtos associados ao usuário
 }
